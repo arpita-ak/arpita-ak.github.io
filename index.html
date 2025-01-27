@@ -3,49 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Nodes</title>
+    <title>Interactive Nodes with Projects</title>
     <style>
         body {
             margin: 0;
             overflow: hidden;
             background: #2b2b2b;
+            font-family: Arial, sans-serif;
+            color: white;
         }
         canvas {
             display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
         }
+        .project-container {
+            position: relative;
+            z-index: 1; /* Ensures it appears above the canvas */
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            max-width: 80%;
+            margin: 50px auto;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        .project {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .project:hover {
+            transform: translateY(-10px);
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5);
+        }
+        .project h3 a {
+    text-decoration: none;
+    color: #ffffff; /* Adjust color as per your design */
+    transition: color 0.3s ease;
+}
+
+.project h3 a:hover {
+    color: #ffcc00; /* Highlight color on hover */
+}
+
     </style>
 </head>
 <body>
-    <canvas id="interactiveCanvas"></canvas>     
-        
-	</div>
+    <canvas id="interactiveCanvas"></canvas>
+    
+<div class="project-container">
+    <div class="project">
+        <h3><a href="eLe.html">eLe Rangoli</a></h3>
+        <p>This is a eLe Rangoli learning Game to give South Indian experience with the music as well as the traditional art of rangoli. This was submitted to a game jam with the theme to "Start with Nothing".</p>
+    </div>
+    <div class="project">
+        <h3><a href="project2.html">Project Two</a></h3>
+        <p>Description of the second project. Brief details about its purpose and technology used.</p>
+    </div>
+    <div class="project">
+        <h3><a href="project3.html">Project Three</a></h3>
+        <p>Description of the third project. Brief details about its purpose and technology used.</p>
+    </div>
+    <div class="project">
+        <h3><a href="project4.html">Project Four</a></h3>
+        <p>Description of the fourth project. Brief details about its purpose and technology used.</p>
+    </div>
+</div>
+    
     <script>
-	
         const canvas = document.getElementById('interactiveCanvas');
         const ctx = canvas.getContext('2d');
 
-        // Set canvas size to fill the window
+        // Resize canvas
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        const mouse = { x: null, y: null }; // Mouse position
+        const mouse = { x: null, y: null };
         const nodes = [];
-        const nodeCount = 200; // Number of nodes
-        const interactionRadius = 100; // Cursor interaction radius
+        const nodeCount = 200;
+        const interactionRadius = 100;
 
-        // Initialize mouse movement tracking
+        // Mouse event listeners
         window.addEventListener('mousemove', (event) => {
             mouse.x = event.clientX;
             mouse.y = event.clientY;
         });
 
-        // Reset mouse position when leaving the canvas
         window.addEventListener('mouseout', () => {
             mouse.x = null;
             mouse.y = null;
         });
 
-        // Create node objects
+        // Create nodes
         for (let i = 0; i < nodeCount; i++) {
             nodes.push({
                 x: Math.random() * canvas.width,
@@ -55,7 +112,7 @@
             });
         }
 
-        // Draw nodes and connections
+        // Draw and animate nodes
         function drawNodes() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -84,17 +141,14 @@
             });
         }
 
-        // Update node positions
         function updateNodes() {
             nodes.forEach(node => {
                 node.x += node.vx;
                 node.y += node.vy;
 
-                // Bounce off canvas edges
                 if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
                 if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
 
-                // Interaction: Push nodes away from the cursor
                 if (mouse.x !== null && mouse.y !== null) {
                     const dx = mouse.x - node.x;
                     const dy = mouse.y - node.y;
@@ -109,7 +163,6 @@
             });
         }
 
-        // Animation loop
         function animate() {
             drawNodes();
             updateNodes();
